@@ -1,0 +1,717 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS Immersion Day 2023",
+    "Mappings": {
+        "RegionMap": {
+            "us-east-1": {
+                "AMI": "ami-0f8e6a90eefa03184"
+            }
+        }
+    },
+    "Resources": {
+        "EC2Instance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "ImageId": {
+                    "Fn::FindInMap": [
+                        "RegionMap",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        "AMI"
+                    ]
+                },
+                "InstanceType": "m5.large",
+                "NetworkInterfaces": [
+                    {
+                        "AssociatePublicIpAddress": "True",
+                        "DeleteOnTermination": "True",
+                        "SubnetId": {
+                            "Ref": "PublicSubnet"
+                        },
+                        "DeviceIndex": "0",
+                        "GroupSet": [
+                            {
+                                "Ref": "QlikSecurityGroup"
+                            }
+                        ]
+                    }
+                ],
+                "EbsOptimized": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-QlikImmersionDayNode"
+                                ]
+                            ]
+                        }
+                    },
+                    {
+                        "Key": "StackName",
+                        "Value": {
+                            "Ref": "AWS::StackName"
+                        }
+                    },
+                    {
+                        "Key": "Owner",
+                        "Value": "john.park@qlik.com"
+                    },
+                    {
+                        "Key": "24x7",
+                        "Value": "24x7"
+                    }
+                ]
+            },
+            "DependsOn": "AuroraPrimaryInstance"
+        },
+        "MyRedshiftSecret": {
+            "Type": "AWS::SecretsManager::Secret",
+            "Properties": {
+                "Description": "This is a Secrets Manager secret for a Redshift cluster",
+                "GenerateSecretString": {
+                    "SecretStringTemplate": "{\"username\": \"qlik123\"}",
+                    "GenerateStringKey": "password",
+                    "PasswordLength": 16,
+                    "ExcludeCharacters": "\"'@/\\"
+                }
+            }
+        },
+        "RedShiftCluster": {
+            "Type": "AWS::Redshift::Cluster",
+            "Properties": {
+                "AllowVersionUpgrade": "true",
+                "AutomatedSnapshotRetentionPeriod": "0",
+                "ClusterType": "single-node",
+                "DBName": "testdrive",
+                "Encrypted": "true",
+                "MasterUsername": {
+                    "Fn::Sub": "{{resolve:secretsmanager:${MyRedshiftSecret}::username}}"
+                },
+                "MasterUserPassword": {
+                    "Fn::Sub": "{{resolve:secretsmanager:${MyRedshiftSecret}::password}}"
+                },
+                "NodeType": "dc2.large",
+                "PubliclyAccessible": "false",
+                "VpcSecurityGroupIds": [
+                    {
+                        "Ref": "QlikSecurityGroup"
+                    }
+                ],
+                "ClusterSubnetGroupName": {
+                    "Ref": "RedshiftClusterSubnetGroup"
+                }
+            }
+        },
+        "RedshiftClusterSubnetGroup": {
+            "Type": "AWS::Redshift::ClusterSubnetGroup",
+            "Properties": {
+                "Description": "Redshift Cluster Subnet Group",
+                "SubnetIds": [
+                    {
+                        "Ref": "PublicSubnet"
+                    }
+                ]
+            }
+        },
+        "RedShiftClusterBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "BucketName": {
+                    "Fn::Sub": "qlik-immersionday-${AWS::AccountId}-${AWS::Region}"
+                }
+            }
+        },
+        "SecretRedshiftAttachment": {
+            "Type": "AWS::SecretsManager::SecretTargetAttachment",
+            "Properties": {
+                "SecretId": {
+                    "Ref": "MyRedshiftSecret"
+                },
+                "TargetId": {
+                    "Ref": "RedShiftCluster"
+                },
+                "TargetType": "AWS::Redshift::Cluster"
+            }
+        },
+        "MyAuroraDBSecret": {
+            "Type": "AWS::SecretsManager::Secret",
+            "Properties": {
+                "Description": "This is a Secrets Manager secret for a AuroraDB Cluster",
+                "GenerateSecretString": {
+                    "SecretStringTemplate": "{\"username\": \"qlik123\"}",
+                    "GenerateStringKey": "password",
+                    "PasswordLength": 16,
+                    "ExcludeCharacters": "\"'@/\\"
+                }
+            }
+        },
+        "AuroraDBCluster": {
+            "Type": "AWS::RDS::DBCluster",
+            "Properties": {
+                "BackupRetentionPeriod": 7,
+                "DBClusterIdentifier": {
+                    "Fn::Sub": "qlik-auroracluster-${AWS::AccountId}"
+                },
+                "DatabaseName": "aws_immersion_day",
+                "DBSubnetGroupName": {
+                    "Ref": "AuroraDBSubnetGroup"
+                },
+                "DeletionProtection": false,
+                "Engine": "aurora-postgresql",
+                "EngineMode": "provisioned",
+                "EngineVersion": 11.9,
+                "MasterUsername": {
+                    "Fn::Sub": "{{resolve:secretsmanager:${MyAuroraDBSecret}::username}}"
+                },
+                "MasterUserPassword": {
+                    "Fn::Sub": "{{resolve:secretsmanager:${MyAuroraDBSecret}::password}}"
+                },
+                "Port": 5432,
+                "SourceRegion": {
+                    "Ref": "AWS::Region"
+                },
+                "StorageEncrypted": true,
+                "VpcSecurityGroupIds": [
+                    {
+                        "Ref": "QlikSecurityGroup"
+                    }
+                ]
+            }
+        },
+        "SecretAuroraDBAttachment": {
+            "Type": "AWS::SecretsManager::SecretTargetAttachment",
+            "Properties": {
+                "SecretId": {
+                    "Ref": "MyAuroraDBSecret"
+                },
+                "TargetId": {
+                    "Ref": "AuroraDBCluster"
+                },
+                "TargetType": "AWS::RDS::DBCluster"
+            }
+        },
+        "AuroraPrimaryInstance": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "Engine": "aurora-postgresql",
+                "DBClusterIdentifier": {
+                    "Ref": "AuroraDBCluster"
+                },
+                "DBInstanceClass": "db.r5.large",
+                "DBSubnetGroupName": {
+                    "Ref": "AuroraDBSubnetGroup"
+                }
+            }
+        },
+        "AuroraDBSubnetGroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": {
+                    "Ref": "AWS::StackName"
+                },
+                "SubnetIds": [
+                    {
+                        "Ref": "PublicSubnet"
+                    },
+                    {
+                        "Ref": "PublicSubnet2"
+                    }
+                ]
+            }
+        },
+        "QlikSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "-QlikSecurityGroup"
+                        ]
+                    ]
+                },
+                "GroupDescription": "Default Security Rules for AWS Immersion Day",
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 80,
+                        "ToPort": 80,
+                        "CidrIp": "0.0.0.0/0",
+                        "Description": "Port 80"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 3552,
+                        "ToPort": 3552,
+                        "CidrIp": "0.0.0.0/0",
+                        "Description": "Qlik Replicate"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 5432,
+                        "ToPort": 5432,
+                        "CidrIp": "0.0.0.0/0",
+                        "Description": "PostgreSQL"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 9000,
+                        "ToPort": 9000,
+                        "CidrIp": "0.0.0.0/0",
+                        "Description": "Kafdrop"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 3000,
+                        "ToPort": 3000,
+                        "CidrIp": "0.0.0.0/0",
+                        "Description": "Sqlpad"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 22,
+                        "ToPort": 22,
+                        "CidrIp": "71.84.221.8/32",
+                        "Description": "john.park@qlik.com - IP"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": 0,
+                        "ToPort": 65535,
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            }
+        },
+        "SGBaseIngress": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "QlikSecurityGroup"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": 5439,
+                "ToPort": 5439,
+                "SourceSecurityGroupId": {
+                    "Fn::GetAtt": [
+                        "QlikSecurityGroup",
+                        "GroupId"
+                    ]
+                }
+            }
+        },
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/24",
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-VPC"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-IG"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "AttachGateway": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "InternetGatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "PublicSubnet": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": "10.0.0.0/25",
+                "AvailabilityZone": "us-east-1a",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-PublicSubnet"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "PublicSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "CidrBlock": "10.0.0.128/25",
+                "AvailabilityZone": "us-east-1b",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-PublicSubnet2"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "PublicRouteTable": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "VPC"
+                },
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    },
+                    {
+                        "Key": "Network",
+                        "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    {
+                                        "Ref": "AWS::StackName"
+                                    },
+                                    "-PublicRouteTable"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "DependsOn": "AttachGateway",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "InternetGateway"
+                }
+            }
+        },
+        "PublicSubnetRouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnet"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            }
+        },
+        "PublicSubnet2RouteTableAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "PublicSubnet2"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRouteTable"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "InstanceName": {
+            "Description": "InstanceId of the newly created EC2 instance",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        {
+                            "Ref": "AWS::StackName"
+                        },
+                        "-QlikImmersionDayNode"
+                    ]
+                ]
+            }
+        },
+        "InstanceId": {
+            "Description": "InstanceId of the newly created EC2 instance",
+            "Value": {
+                "Ref": "EC2Instance"
+            }
+        },
+        "AavailabilityZone": {
+            "Description": "Availability Zone of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EC2Instance",
+                    "AvailabilityZone"
+                ]
+            }
+        },
+        "PublicDNS": {
+            "Description": "Public DNSName of the newly created QlikImmersionDayNode ",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EC2Instance",
+                    "PublicDnsName"
+                ]
+            }
+        },
+        "PublicIP": {
+            "Description": "Public DNSName of the newly created NATInstance ",
+            "Value": {
+                "Fn::GetAtt": [
+                    "EC2Instance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "Documentation": {
+            "Description": "AWS Immersion Day Documentation ",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "https://qlik-aws.netlify.app/"
+                    ]
+                ]
+            }
+        },
+        "Kafdrop": {
+            "Description": "Kafdrop UI ",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "EC2Instance",
+                                "PublicIp"
+                            ]
+                        },
+                        ":9000"
+                    ]
+                ]
+            }
+        },
+        "QlikReplicate": {
+            "Description": "Qlik Replicate UI ",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "EC2Instance",
+                                "PublicIp"
+                            ]
+                        },
+                        ":3552/attunityreplicate"
+                    ]
+                ]
+            }
+        },
+        "SQLPad": {
+            "Description": "SQLPad UI ",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        "http://",
+                        {
+                            "Fn::GetAtt": [
+                                "EC2Instance",
+                                "PublicIp"
+                            ]
+                        },
+                        ":3000"
+                    ]
+                ]
+            }
+        },
+        "VPCName": {
+            "Description": "Name of the newly created VPC",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        {
+                            "Ref": "AWS::StackName"
+                        },
+                        "-QlikImmersionDayNode"
+                    ]
+                ]
+            }
+        },
+        "VPC": {
+            "Description": "Id of the newly created VPC ",
+            "Value": {
+                "Ref": "VPC"
+            }
+        },
+        "SecurityGroupName": {
+            "Description": "Name of the newly created Security Group",
+            "Value": {
+                "Fn::Join": [
+                    "",
+                    [
+                        {
+                            "Ref": "AWS::StackName"
+                        },
+                        "-QlikSecurityGroup"
+                    ]
+                ]
+            }
+        },
+        "SecurityGroup": {
+            "Description": "Id of the newly created EC2 Security Group",
+            "Value": {
+                "Ref": "QlikSecurityGroup"
+            }
+        },
+        "GithubDocumentation": {
+            "Description": "URL of Github Documenation",
+            "Value": "https://github.com/Qlik-PE/AWS-Cloudformation"
+        },
+        "RedshiftClusterEndpoint": {
+            "Description": "Redshift Cluster Endpoint",
+            "Value": {
+                "Fn::GetAtt": [
+                    "RedShiftCluster",
+                    "Endpoint.Address"
+                ]
+            }
+        },
+        "RedshiftBucket": {
+            "Description": "S3 Bucket Name  Arn",
+            "Value": {
+                "Fn::GetAtt": [
+                    "RedShiftClusterBucket",
+                    "Arn"
+                ]
+            }
+        },
+        "RedshiftBucketDomain": {
+            "Description": "S3 Bucket Name DomainName",
+            "Value": {
+                "Fn::GetAtt": [
+                    "RedShiftClusterBucket",
+                    "DomainName"
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+version: 2.0
+
+defaultLocaleCode: en-US
+
+localeCodes:
+  - en-US
+
+awsAccountConfig:
+  accountSources: 
+    - workshop_studio
+  participantRole: 
+    iamPolicies: 
+      - static/iam/policy.json
+    managedPolicies: 
+      - "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+      - "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      - "arn:aws:iam::aws:policy/IAMFullAccess"
+      - "arn:aws:iam::aws:policy/AmazonMSKFullAccess"
+  regionConfiguration:
+    deployableRegions:
+      required:
+        - us-east-1
+    minAccessibleRegions: 1
+    maxAccessibleRegions: 2
+    accessibleRegions:
+      required:
+        - us-east-1
+infrastructure:
+  cloudformationTemplates:
+    - templateLocation: static/qlik-SAP-CFT.json
+      label: "Qlik Replicate Real-time SAP Data Streaming"
