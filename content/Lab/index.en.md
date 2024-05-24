@@ -1,5 +1,5 @@
 ---
-title: "Lab : Real-time SAP Data Analytics on AWS Using Qlik Replicate"
+title: "Lab : Real-time SAP Data Analytics on AWS Using Qlik Cloud Data Analytics"
 weight: 20
 ---
 
@@ -23,7 +23,7 @@ CONTENTS
 
 [Getting access to your lab environment](#getting-access-to-your-lab-environment)
 
-[Accessing Qlik Replicate](#accessing-qlik-replicate-for-workshop)
+[Accessing QCDI](#accessing-qlik-replicate-for-workshop)
 
 [Tutorial](#tutorial)
 
@@ -47,7 +47,7 @@ CONTENTS
 
 [Qlik Partner Team](#qlik-partner-team)
 
-[Register for a free Qlik Replicate POC](#register-for-a-free-qlik-replicate-poc)
+[Register for a free QCDI POC](#register-for-a-free-qlik-replicate-poc)
 
 # Preface
 
@@ -60,7 +60,8 @@ This document was created with Qlik Immersion Day student Image version  2023100
   ------------------------------------------------------------------------------
   |Version   |Description                  |Author             |Workshop Version
   |--------- | ----------------------------|------------------ |---------------
-  |1.0       |Initial Version to fulfill AWS Immersion Day requirements for Workshop Platfrom     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.8
+  |1.0       |Initial Version to fulfill AWS Immersion Day requirements for Workshop Platform     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.8
+  |1.1       |Upgrade to Qlik Cloud Data Integration Platform     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.9
  -------------------------------------------------------------------------
 
 # Introduction
@@ -91,28 +92,27 @@ Day Agenda (9:30 AM - 12:30 PM)
 
 ## Objective for the Workshop
 
-This tutorial will demonstrate how to use Qlik Replicate to ingest and deliver data in real-time to your various environments. Follow the step-by-step tutorial to quickly load sample data from a SAP S/4 database into your Amazon Redshift data warehouse. Then watch as data updates happen in real time. Due to cost and timing this tutorial runs in a single EC2 environment setup with Qlik Replicate and Docker for MySQL, PostgreSQL, Kafka, AWS Aurora, and Single Node Amazon Redshift Cluster.
+This tutorial will demonstrate how to use Qlik Cloud Data Integration(QCDI) to ingest and deliver data in real-time to your various environments. Follow the step-by-step tutorial to quickly load sample data from a SAP S/4 database into your Amazon Redshift data warehouse. Then watch as data updates happen in real time. Due to cost and timing this tutorial runs in a single EC2 environment setup with Docker for MySQL, PostgreSQL, Kafka.  AWS Aurora, and Single Node Amazon Redshift Cluster is also deployed to show AWS Target Connections.
 
-***The Objective of this tutorial is to get introductory hands-on experience using Qlik Data Integration Tools not to become an expert at using Qlik Replicate.***
+***The Objective of this tutorial is to get introductory hands-on experience using Qlik Cloud Data Integration Tools not to become an expert at using QCDI.***
 
 # Overview
 
 ## Goals for this Workshop
 
-1. Learn how to Configure Qlik Replicate to Work with Source and Target     Endpoints.
+1. Learn how to Configure QCDI to Work with Source and Target Connections.
 
-2. Learn how to Design Qlik Replicate Tasks.
+2. Learn how to Design QCDI Tasks.
 
-3. Learn how to Monitor Qlik Replicate Tasks.
+3. Learn how to Monitor QCDI Tasks.
 
-Our tutorials will consist of 1 demo to get students to understand the flow of Qlik Replicate. Subsequently there is 2 real life scenarios for students get hands on experience with Qlik Replicate.
+Our tutorials will consist of 1 demo to get students to understand the flow of QCDI. Subsequently there is 2 real life scenarios for students get hands on experience with QCDI.
 
-While the tutorial scenario quickly highlights the concept of data ingestion and streaming to PostgresSQL, Kafka, and Amazon Redshift there are additional tuning that can be done to make efficiency gains. Qlik Replicate can also deliver any data from popular relational database systems, mainframes, or SAP applications that you might have in your enterprise.
+While the tutorial scenario quickly highlights the concept of data ingestion and streaming to PostgresSQL, Kafka, and Amazon Redshift there are additional tuning that can be done to make efficiency gains. QCDI can also deliver any data from popular relational database systems, mainframes, or SAP applications that you might have in your enterprise.
 
-In addition, at the end of the tutorial you should check out Qlik Compose, our Data Warehousing Automation solution that can automate the process of creating and updating analytics-ready data sets in Amazon
+In addition, at the end of the tutorial you should will get exposure to QCDI Transformation jobs for Data Warehousing Automation solution that can automate the process of creating and updating analytics-ready data sets in Amazon
 Redshift.
 
-Click the [Contact Us](https://qlik-aws-sap.netlify.app/contact_us) menu and complete the form to request more information about Qlik Replicate connectivity or Qlik Compose for Data Warehouses.
 
 # Getting Started
 
@@ -120,7 +120,7 @@ Click the [Contact Us](https://qlik-aws-sap.netlify.app/contact_us) menu and c
 
 Before beginning with the tutorial, we like to tell you that your Qlik and AWS team is here to help you please do not hesitate to reach out.
 
-This lab consists of many components to demonstrate for you how easy it is to create connections in Qlik Replicate and execute Qlik Replicate
+This lab consists of many components to demonstrate for you how easy it is to create connections in QCDI and execute QCDI
 tasks.
 
 A few of the main technical use cases are following.
@@ -131,10 +131,9 @@ A few of the main technical use cases are following.
 
 - Stream Data into Cloud Data Warehouse
 
-Inside your AWS account a CloudFormation script ran and created an environment where you have a EC2 instance with Docker Compose
-environment that has SQLPad, MySQL, Postgres, Kafdrop and other tools.
+Inside your AWS account a CloudFormation script ran and created an environment where you have a EC2 instance with Docker Compose environment that has SQLPad, MySQL, Postgres, Kafdrop and other tools.
 
-Qlik Replicate software is installed on the same EC2 instance with full trial license for your use.
+QCDI software is an SaaS Tool that we will enable a tenant for your purposes.
 
 Amazon Redshift Cluster, Amazon Aura and Sample AWS Bucket is created for your use in this lab.
 
@@ -147,15 +146,15 @@ By going to Cloud formation on EC2 menu please verify your cloud formation stack
 
 ![A screenshot of a computer Description automatically generated](/static/qlik-images/image5.png)
 
-On your AWS console please go to EC2 and retrieve your Qlik Replicate IP address.
+On your AWS console please go to EC2 and retrieve your QCDI IP address.
 
 ![A screenshot of a computer Description automatically generated](/static/qlik-images/image6.png)
 
-## Accessing Qlik Replicate for Workshop
+## Accessing QCDI for Workshop
 
 Before starting tutorial and labs make sure you can log into the following
 
-### Connecting to Qlik Replicate Web UI
+### Connecting to QCDI Web UI
 
 URL: [**https://YOUR_SERVER_IP_ADDRESS:3552/attunityreplicate/**](https://your_server_ip_address:3552/attunityreplicate/)
 
@@ -209,7 +208,7 @@ Please go into AWS Console and find **AWS Secrets Manager**
 
 ## Prerequisites for Starting Tutorials
 
-First of all, open Qlik Replicate on a web browser and
+First of all, open QCDI on a web browser and
 login.
 
 > URL:**https://YOUR_SERVER_IP_ADDRESS:3552/attunityreplicate/**
@@ -222,7 +221,7 @@ login.
 > ***Please note that you may need to press accept security and
 > proceed.***
 
-Once you are logged in you will see the main screen for Qlik Replicate.
+Once you are logged in you will see the main screen for QCDI.
 
 ![ ](/static/qlik-images/image11.png)
 
@@ -449,7 +448,7 @@ When you have everything set, press "OK" to create the task. Once you have comp
 
 ![ ](/static/qlik-images/image29.png)
 
-Qlik Replicate is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure your task, we need to select a source endpoint (SAP Application) and a target endpoint (Kafka). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says Drop source endpoint here, or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
+QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure your task, we need to select a source endpoint (SAP Application) and a target endpoint (Kafka). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says Drop source endpoint here, or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
 ![ ](/static/qlik-images/image30.png)
 Repeat the same process for the Kafka Target endpoint. Your screen should now look like this:
@@ -509,7 +508,7 @@ Pre-Load:
 
 After Initial Load:![A screenshot of a computer Description automatically generated](/static/qlik-images/image39.png)
 
-Now switch back to Qlik Replicate Task manager. After **Full Load** is complete, click on the "Completed" bar to display the tables. If there
+Now switch back to QCDI Task manager. After **Full Load** is complete, click on the "Completed" bar to display the tables. If there
 is DML activity running in the background. Click on the "Change Processing" tab to see it in action.
 
 ![ ](/static/qlik-images/image40.png)
@@ -653,7 +652,7 @@ Once you have everything set, press "OK" to create the task. When you have com
 
 ![ ](/static/qlik-images/image49.png)
 
-Qlik Replicate is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select
+QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select
 a source endpoint (SAP Application) and a target endpoint (Aurora). You can either drag the "SAP Application Source" endpoint from the box on
 the left of the screen and drop it into the circle that says "Drop source endpoint here" or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
@@ -803,7 +802,7 @@ Due to Design of Redshift Cluster you need to use S3 as intermediate staging are
 
 ### Step 2.1 Amazon S3 and IAM Configuration
 
-Next, we need to configure our IAM Policy and Download Access and Secret Keys for Qlik Replicate to stage the data to Amazon S3 prior to writing it Redshift.
+Next, we need to configure our IAM Policy and Download Access and Secret Keys for QCDI to stage the data to Amazon S3 prior to writing it Redshift.
 
 AWS IAM Policies, Users, and Roles are way AWS Secures resources and gives the right amount of access.
 
@@ -826,7 +825,7 @@ Please get the name of the bucket and what AWS Region the bucket belongs in
 
 - This will help during S3 setup.
 
-Go back to Qlik Replicate and Fill in following from End Point Configurations
+Go back to QCDI and Fill in following from End Point Configurations
 
 - Bucket Name: " YOURBUCKETNAME"
 
@@ -875,13 +874,13 @@ Review you Username and Press Button "Create User"
 **At this point your new user with Full Amazon S3 privileges are
 created**
 
-Copy Access Key and Secret Key to Qlik Replicate Connection window (Click on Show on access key to view the key)
+Copy Access Key and Secret Key to QCDI Connection window (Click on Show on access key to view the key)
 
 ![ ](/static/qlik-images/image71.png)
 
-Download your keys or copy the keys into Qlik Replicate Connection Window.(Please Click on Show to see your secret key)
+Download your keys or copy the keys into QCDI Connection Window.(Please Click on Show to see your secret key)
 
-Please copy the keys to your Qlik Replicate Connection Window
+Please copy the keys to your QCDI Connection Window
 
 - Access Key: "YOUR ACCESS KEY"
 
@@ -896,11 +895,11 @@ Press "Test" to test connection
 
 ![ ](/static/qlik-images/image73.png)
 
-*Note if you run into issues with Qlik Replicate complaining about S3 access please verify the qlik-replicate user has access to S3 buckets.*
+*Note if you run into issues with QCDI complaining about S3 access please verify the qlik-replicate user has access to S3 buckets.*
 
 ![ ](/static/qlik-images/image74.png)
 
-*Qlik Replicate can write directly to S3 For more details about using Amazon S3 as a target, please review the section "Using a Amazon S3 as a Target" in Chapter 9 "Adding and Managing Target Endpoints" of the [Qlik Replicate User Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf)*
+*QCDI can write directly to S3 For more details about using Amazon S3 as a target, please review the section "Using a Amazon S3 as a Target" in Chapter 9 "Adding and Managing Target Endpoints" of the [QCDI User Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf)*
 
 ###
 
@@ -942,7 +941,7 @@ Give this task a meaningful name like SAP Application to Redshift. For this tas
 Once you have everything set, press "OK" to create the task. When you have completed this step, you will see a window that looks like this:
 
 ![ ](/static/qlik-images/image75.png)
-Qlik Replicate is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select a source endpoint (SAP) and a target endpoint (Redshift). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says "Drop source endpoint here", or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
+QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select a source endpoint (SAP) and a target endpoint (Redshift). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says "Drop source endpoint here", or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
 ![ ](/static/qlik-images/image50.png)
 
@@ -1026,17 +1025,17 @@ Following concepts were covered in the lab:
 
 # Resources
 
-### Thanks for taking the Qlik Replicate Lab for a spin. Assuming you followed all the steps and completed the exercises, we are confident that you will have found the experience to be a good one and that our focus on ease of use was evident
+### Thanks for taking the QCDI Lab for a spin. Assuming you followed all the steps and completed the exercises, we are confident that you will have found the experience to be a good one and that our focus on ease of use was evident
 
 ### The product documentation and help can be found at
 
-[Qlik Replicate Online
-Guide](https://help.qlik.com/en-US/replicate/November2020-SR1/Content/Replicate/Main/Introduction/Home.htm) - Online Help Guide for Qlik Replicate
+[QCDI Online
+Guide](https://help.qlik.com/en-US/replicate/November2020-SR1/Content/Replicate/Main/Introduction/Home.htm) - Online Help Guide for QCDI
 
-[Qlik Replicate Offline User
-Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf) -PDF Help Guide for Qlik Replicate
+[QCDI Offline User
+Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf) -PDF Help Guide for QCDI
 
-[Qlik Community](https://community.qlik.com/) - Community page for Qlik Replicate
+[Qlik Community](https://community.qlik.com/) - Community page for QCDI
 
 ### About the Sample Data
 
@@ -1046,17 +1045,17 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 
 # Videos
 
-### Thanks for taking the Qlik Replicate Lab for a spin. Here are some Video resource for the Labs as well other Video Assets produced by the Qlik Team
+### Thanks for taking the QCDI Lab for a spin. Here are some Video resource for the Labs as well other Video Assets produced by the Qlik Team
 
 ### The product documentation and help can be found at
 
-- [Qlik Replicate Explainer and Demo Video](https://youtu.be/3UBa5WgOfio)
+- [QCDI Explainer and Demo Video](https://youtu.be/3UBa5WgOfio)
 
-- [Qlik Replicate Real Time Data Ingestion](https://youtu.be/qU7tF7npJt0)
+- [QCDI Real Time Data Ingestion](https://youtu.be/qU7tF7npJt0)
 
-- [Qlik Replicate Many to One](https://youtu.be/0mka2LNf7Sg)
+- [QCDI Many to One](https://youtu.be/0mka2LNf7Sg)
 
-- [Qlik Replicate Installation on Linux](https://youtu.be/tMJhi2U2JLw)
+- [QCDI Installation on Linux](https://youtu.be/tMJhi2U2JLw)
 
 # Contacts
 
@@ -1076,7 +1075,7 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 - *David Frerik, Evangelist and Technology Partnership - <david.frerik@qlik.com>*
 - *Brad Songer, Regional Alliance Manager -<brad.songer@qlik.com>*
 
-# Register for a free Qlik Replicate POC
+# Register for a free QCDI POC
 
 - For customers and prospect of AWS who are looking to do a POC Please register via this [link](https://www.qlik.com/us/try-or-buy/buy-now?campaignid=7013z000000j5hi)
 ![](/static/qlik-images/image82.png)
