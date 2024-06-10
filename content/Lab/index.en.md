@@ -150,16 +150,6 @@ This is the Qlik Cloud Tenant that we will run our workshop in.
 Please make sure you have received your credentials to log into above tenant.
 **If you do not have credentials please check your spam or let the instructor know**
 
-### Connecting to Qlik Cloud Data Integration Web UI
-
-
-### Using AWS Secrets Manager
-
-**For your Redshift and RDS Instances the passwords are generated and stored in AWS Secrets Manager Service**
-
-Please go into AWS Console and find **AWS Secrets Manager**
-
-![ ](/static/qlik-images/image83.png)
 
 # Tutorial
 
@@ -169,6 +159,14 @@ Please go into AWS Console and find **AWS Secrets Manager**
 
 2. Create your Person Space inside Qlik Data Integration
     What is your Space ? 
+    Spaces are areas of Qlik Cloud Data Integration that are used to create and store data projects. Inside the space, you can also create new data connections using connectors, and manage access to Data Movement gateways. You can use your Personal space, or governed data spaces.
+
+3.**For your Redshift and RDS Instances the passwords are generated and stored in AWS Secrets Manager Service**
+
+Please go into AWS Console and access **AWS Secrets Manager**
+
+![ ](/static/qlik-images/image83.png)
+
 
 ## Navigating the Tutorial
 
@@ -176,7 +174,7 @@ To navigate the tutorial, it is best to follow the steps in order. If for some r
 
 In this tutorial you will be using an SAP HANA DB and S/4 system setup by our team as your source. We will step through setting up connections, so you get an idea of how to unlock your data from SAP System.
 
-## Qlik Lab 1 : SAP to Kafka in Realtime
+## Qlik Lab 1 : SAP to Amazon S3 Data in Realtime
 
 ### Step 1 - SAP Source Configuration
 
