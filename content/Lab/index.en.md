@@ -23,7 +23,7 @@ CONTENTS
 
 [Getting access to your lab environment](#getting-access-to-your-lab-environment)
 
-[Accessing Qlik Cloud and QCDI(Qlik Cloud Data Integration)](#accessing-qlik-qlik cloud data integration-for-workshop)
+[Accessing QCDI(Qlik Cloud Data Integration)](#getting-access-to-your-lab-environment)
 
 [Tutorial](#tutorial)
 
@@ -129,16 +129,15 @@ Inside your AWS account a CloudFormation script ran and created an environment w
 
 ### AWS Environment
 
-At this time, you should be able to access AWS Console for this lab via
+At this time, you should be able to access AWS Console for this lab via Workshop Studio
+
 pressing **Open AWS Console** as described earlier.
 
-By going to Cloud formation on EC2 menu please verify your cloud formation stack creation is complete.
+You should see following resources created for your Lab.
 
-![A screenshot of a computer Description automatically generated](/static/qlik-images/image5.png)
-
-On your AWS console please go to EC2 and retrieve your Qlik Cloud Data Integration IP address.
-
-![A screenshot of a computer Description automatically generated](/static/qlik-images/image6.png)
+1. Amazon Aurora Postgres
+2. Amazon S3 Bucket for Data Lake
+3. Amazon Redshift Cluster
 
 ## Accessing Qlik Cloud Data Integration for Workshop
 
@@ -147,51 +146,12 @@ This is the Qlik Cloud Tenant that we will run our workshop in.
 
 <https://tinyurl.com/qliklab>
 
-<https://4l7ak0m873hp1v4.us.qlikcloud.com>
 
 Please make sure you have received your credentials to log into above tenant.
 **If you do not have credentials please check your spam or let the instructor know**
 
 ### Connecting to Qlik Cloud Data Integration Web UI
 
-URL: [**https://YOUR_SERVER_IP_ADDRESS:3552/attunityqlik cloud data integration/**](https://your_server_ip_address:3552/attunityqlik cloud data integration/)
-
-*This lab has been tested by Firefox Browser and due to certificates not being issued for ephemeral servers you will see below warning.*
-
-***Please proceed ahead by Clicking Advanced\... and pressing accept risk and proceed on***
-
-![](/static/qlik-images/image7.png)
-
-Please use the following credentials:
-
-- Username: "admin"
-
-- Password: "Aws_immersion123"
-
-If you must use a different browser, please let the instructor know.
-
-![ ](/static/qlik-images/image8.png)
-
-### Connecting to SQLPad(SQL query tool)
-
-**SQLPad is an Open-Source tool that allows user to run SQL Query.**
-
-- URL: **http://YOUR_SERVER_IP_ADDRESS:3000**
-
-- Username: "<admin@qlik.com>"
-
-- Password: "Aws_immersion123"
-
-![A screenshot of a login box Description automatically generated](/static/qlik-images/image9.png)
-
-### Connecting to Kafdrop
-
-**Kafdrop is an Open-Source tool that allows user to view Kafka queue
-and Topics.**
-
-> URL: **http://YOUR_SERVER_IP_ADDRESS:9000**
-
-![ ](/static/qlik-images/image10.png)
 
 ### Using AWS Secrets Manager
 
@@ -205,22 +165,10 @@ Please go into AWS Console and find **AWS Secrets Manager**
 
 ## Prerequisites for Starting Tutorials
 
-First of all, open Qlik Cloud Data Integration on a web browser and
-login.
+1. Log into Qlik Cloud and Access Qlik Data Integration
 
-> URL:**https://YOUR_SERVER_IP_ADDRESS:3552/attunityqlik cloud data integration/**
->
-> 1.Open Qlik Cloud Data Integration in a new tab in your browser.
->
-> 2.For URL, username and password please refer to
-> [here](#getting-access-to-your-lab-environment)
->
-> ***Please note that you may need to press accept security and
-> proceed.***
-
-Once you are logged in you will see the main screen for Qlik Cloud Data Integration.
-
-![ ](/static/qlik-images/image11.png)
+2. Create your Person Space inside Qlik Data Integration
+    What is your Space ? 
 
 ## Navigating the Tutorial
 
