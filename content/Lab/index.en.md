@@ -1073,7 +1073,7 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 - *Matt Hayes, VP SAP Business - <matt.hayes@qlik.com>*
 - *Tom Olivero, Senior Manager, SAP Data Architects - <tom.olivero@qlik.com>*
 - *David Frerik, Evangelist and Technology Partnership - <david.frerik@qlik.com>*
-- *Brad Songer, Regional Alliance Manager -<brad.songer@qlik.com>*
+
 
 # Register for a free QCDI POC
 
