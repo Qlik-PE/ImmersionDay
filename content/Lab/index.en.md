@@ -181,7 +181,7 @@ In this tutorial you will be using an SAP HANA DB and S/4 system setup by our te
 The first thing we need to do is create a source endpoint. We do this by clicking the "Manage Endpoint Connections" button at the top of the
 screen.
 
-![ ](/static/qlik-images/image12.png)
+images
 
 Pressing "Manage Endpoint Connections" will bring this window.
 
@@ -1012,15 +1012,11 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 - *Boris Geller, Head of Strategic Tech BD - <boris.geller@qlik.com>*
 - *Hugo Sheng, Sr Director, Partner Engineeing     - <hugo.sheng@qlik.com>*  
 - *John Park, Principal Solution Architect - <john.park@qlik.com>*
-- *Dalton Ruer, Sr. Solution Architect - <dalton.ruer@qlik.com>*
 - *Matt Hayes, VP SAP Business - <matt.hayes@qlik.com>*
-- *Tom Olivero, Senior Manager, SAP Data Architects - <tom.olivero@qlik.com>*
-- *David Frerik, Evangelist and Technology Partnership - <david.frerik@qlik.com>*
-- *Brad Songer, Regional Alliance Manager -<brad.songer@qlik.com>*
+- *Monte Dehenie, Global Alliance Manager -<brad.songer@qlik.com>*
 
-# Register for a free Qlik Cloud Data Integration POC
-
+# Register for a free Qlik Cloud Data Integration POC for SAP
 - For customers and prospect of AWS who are looking to do a POC Please register via this [link](https://www.qlik.com/us/try-or-buy/buy-now?campaignid=7013z000000j5hi)
-![](/static/qlik-images/image82.png)
+-change images
 
-After you completed all the steps in the Quickstart, please return back to this workshop window.
+
