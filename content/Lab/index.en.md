@@ -1,9 +1,9 @@
 ---
-title: "Lab : Real-time SAP Data Analytics on AWS Using Qlik Cloud Data Analytics"
+title: "Lab : Real-time SAP Data Analytics on AWS using Qlik Cloud"
 weight: 20
 ---
 
-# Qlik Immersion Day Workshop
+# AWS Qlik Immersion Day Workshop
 
 CONTENTS
 
@@ -23,7 +23,7 @@ CONTENTS
 
 [Getting access to your lab environment](#getting-access-to-your-lab-environment)
 
-[Accessing QCDI](#accessing-qlik-replicate-for-workshop)
+[Accessing Qlik Cloud and QCDI(Qlik Cloud Data Integration)](#accessing-qlik-qlik cloud data integration-for-workshop)
 
 [Tutorial](#tutorial)
 
@@ -47,7 +47,7 @@ CONTENTS
 
 [Qlik Partner Team](#qlik-partner-team)
 
-[Register for a free QCDI POC](#register-for-a-free-qlik-replicate-poc)
+[Register for a free SAP to Qlik POC](#register-for-a-free-qlik-qlik cloud data integration-poc)
 
 # Preface
 
@@ -55,14 +55,11 @@ This document outlines steps to be followed by participants to complete the AWS 
 
 ## Document Version
 
-This document was created with Qlik Immersion Day student Image version  20231001.
-
   ------------------------------------------------------------------------------
   |Version   |Description                  |Author             |Workshop Version
   |--------- | ----------------------------|------------------ |---------------
-  |1.0       |Initial Version to fulfill AWS Immersion Day requirements for Workshop Platform     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.8
-  |1.1       |Upgrade to Qlik Cloud Data Integration Platform     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.9
- -------------------------------------------------------------------------
+  |1.0       |Initial Version to fulfill AWS Immersion Day requirements for Workshop Platfrom     |John Park, Qlik Partner Engineering & Sathisan Vannadil, AWS|AMI - AWS Immersion Day v1.8
+  |2.0       |Initial Version to fulfill AWS Immersion Day requirements for Workshop Platfrom with modifications to port over to Qlik Cloud Platform    |John Park, Qlik Partner Engineering |AMI - AWS Immersion Day v1.9
 
 # Introduction
 
@@ -70,49 +67,45 @@ This document was created with Qlik Immersion Day student Image version  2023100
 
 Day Agenda (9:30 AM - 12:30 PM)
 
-- **09:30 am**  Modern Data Architecture on AWS - AWS
+- **09:10 am**  Data Foundations for analytics and Generative AI on AWS - AWS
 
-- **10:00 am**  AWS and Qlik: better together - Qlik
+- **09:30 am**  Cloud and Generative AI on AWS - AWS
 
-- **10:15 am**  Cloud Data Integration at scale - Qlik
+- **09:50 am**  Qlik Cloud Data Integration with AWS and Qlik - Qlik
 
-- **10:40 am**  Workshop account signup - AWS & Qlik
+- **10:10 am**  Workshop Account Sign-up
 
-- **11:00 am** - **Qlik Lab1(Demo)**  SAP to Kafka Using Qlik
-    Replicate
-- **11:15 am** - **Qlik Lab2**  SAP to Amazon Aurora Using Qlik
-    Replicate
-- **11:45 am** - **Qlik Lab3**  SAP to Amazon Redshift Using Qlik
-    Replicate
-- **11:55 am** - **Qlik Data Integrations**
+- **11:00 am** - **Qlik Lab1(Demo)**  SAP to Amazon S3 Using QCDI(Qlik
+    Qlik Cloud Data Integration)
+- **11:15 am** - **Qlik Lab2**  SAP to Amazon Aurora Using QCDI(Qlik
+    Qlik Cloud Data Integration)
+- **11:45 am** - **Qlik Lab3**  SAP to Amazon Redshift Using QCDI(Qlik
+    Qlik Cloud Data Integration)
+- **11:55 am** - **Qlik - Presentation**
   - **Demo:** Agile data warehouse automation for SAP Data using Qlik Cloud Data Integration - Qlik
 - **12:15 pm** **Qlik Data Analytics**
   - **Demo:** Modern, AI-powered analytics: Qlik Cloud Analytics - Qlik
-- **12:30 pm** Conclusion & AWS event survey - AWS
+- **12:20 pm** Conclusion & AWS event survey - AWS
 
 ## Objective for the Workshop
 
-This tutorial will demonstrate how to use Qlik Cloud Data Integration(QCDI) to ingest and deliver data in real-time to your various environments. Follow the step-by-step tutorial to quickly load sample data from a SAP S/4 database into your Amazon Redshift data warehouse. Then watch as data updates happen in real time. Due to cost and timing this tutorial runs in a single EC2 environment setup with Docker for MySQL, PostgreSQL, Kafka.  AWS Aurora, and Single Node Amazon Redshift Cluster is also deployed to show AWS Target Connections.
+This tutorial will demonstrate how to use Qlik Cloud to ingest and deliver data in real-time to your various environments. Follow the step-by-step tutorial to quickly load sample data from a SAP S/4 database into your Amazon S3, Amazon Auroa Postgres, Amazon Redshift data warehouse. Then watch as data updates happen in real time and discuss details of Data migration and using Qlik Cloud for your CDC and Transformation tool.
 
-***The Objective of this tutorial is to get introductory hands-on experience using Qlik Cloud Data Integration Tools not to become an expert at using QCDI.***
+***The Objective of this tutorial is to get introductory hands-on experience using Qlik's Data Integration capabilities not to become an expert at using QCDI(Qlik Cloud Data Integration).***
 
 # Overview
 
 ## Goals for this Workshop
 
-1. Learn how to Configure QCDI to Work with Source and Target Connections.
+1. Learn how to Configure Qlik Cloud Data Integration to Work with Source and Target Endpoints.
 
-2. Learn how to Design QCDI Tasks.
+2. Learn how to Design Qlik Cloud Data Integration Tasks for Landing and Transforming Data.
 
-3. Learn how to Monitor QCDI Tasks.
+3. Learn how to Monitor Qlik Cloud Data Integration Tasks.
 
-Our tutorials will consist of 1 demo to get students to understand the flow of QCDI. Subsequently there is 2 real life scenarios for students get hands on experience with QCDI.
+Our tutorials will consist of 1 demo to get students to understand the flow of Qlik Cloud Data Integration. Subsequently there is 2 real life scenarios for students get hands on experience with Qlik Cloud Data Integration.
 
-While the tutorial scenario quickly highlights the concept of data ingestion and streaming to PostgresSQL, Kafka, and Amazon Redshift there are additional tuning that can be done to make efficiency gains. QCDI can also deliver any data from popular relational database systems, mainframes, or SAP applications that you might have in your enterprise.
-
-In addition, at the end of the tutorial you should will get exposure to QCDI Transformation jobs for Data Warehousing Automation solution that can automate the process of creating and updating analytics-ready data sets in Amazon
-Redshift.
-
+While the tutorial scenario quickly highlights the concept of data ingestion and streaming to PostgresSQL, Amazon S3, and Amazon Redshift there are additional tuning that can be done to make efficiency gains. Qlik Cloud Data Integration can also deliver any data from popular relational database systems, mainframes, or SAP applications that you might have in your enterprise.
 
 # Getting Started
 
@@ -120,24 +113,21 @@ Redshift.
 
 Before beginning with the tutorial, we like to tell you that your Qlik and AWS team is here to help you please do not hesitate to reach out.
 
-This lab consists of many components to demonstrate for you how easy it is to create connections in QCDI and execute QCDI
-tasks.
+This lab consists of many components to demonstrate for you how easy it is to create connections in QCDI(Qlik Cloud Data Integration) and execute tasks.
 
 A few of the main technical use cases are following.
 
 - Stream Data to another Database
 
-- Stream Data to Kafka Queue
+- Stream Data to Object Store / Kafka Queue
 
 - Stream Data into Cloud Data Warehouse
 
-Inside your AWS account a CloudFormation script ran and created an environment where you have a EC2 instance with Docker Compose environment that has SQLPad, MySQL, Postgres, Kafdrop and other tools.
-
-QCDI software is an SaaS Tool that we will enable a tenant for your purposes.
-
-Amazon Redshift Cluster, Amazon Aura and Sample AWS Bucket is created for your use in this lab.
+Inside your AWS account a CloudFormation script ran and created an environment where you have a your own Amazon S3, Amazon Aurora Postgres and Amazon Redshift.
 
 ## Getting access to your lab environment
+
+### AWS Environment
 
 At this time, you should be able to access AWS Console for this lab via
 pressing **Open AWS Console** as described earlier.
@@ -146,17 +136,25 @@ By going to Cloud formation on EC2 menu please verify your cloud formation stack
 
 ![A screenshot of a computer Description automatically generated](/static/qlik-images/image5.png)
 
-On your AWS console please go to EC2 and retrieve your QCDI IP address.
+On your AWS console please go to EC2 and retrieve your Qlik Cloud Data Integration IP address.
 
 ![A screenshot of a computer Description automatically generated](/static/qlik-images/image6.png)
 
-## Accessing QCDI for Workshop
+## Accessing Qlik Cloud Data Integration for Workshop
 
-Before starting tutorial and labs make sure you can log into the following
+Before starting tutorial and labs make sure you can log into the following:
+This is the Qlik Cloud Tenant that we will run our workshop in.
 
-### Connecting to QCDI Web UI
+<https://tinyurl.com/qliklab>
 
-URL: [**https://YOUR_SERVER_IP_ADDRESS:3552/attunityreplicate/**](https://your_server_ip_address:3552/attunityreplicate/)
+<https://4l7ak0m873hp1v4.us.qlikcloud.com>
+
+Please make sure you have received your credentials to log into above tenant.
+**If you do not have credentials please check your spam or let the instructor know**
+
+### Connecting to Qlik Cloud Data Integration Web UI
+
+URL: [**https://YOUR_SERVER_IP_ADDRESS:3552/attunityqlik cloud data integration/**](https://your_server_ip_address:3552/attunityqlik cloud data integration/)
 
 *This lab has been tested by Firefox Browser and due to certificates not being issued for ephemeral servers you will see below warning.*
 
@@ -195,12 +193,11 @@ and Topics.**
 
 ![ ](/static/qlik-images/image10.png)
 
-### Using AWS Secrets Manager 
+### Using AWS Secrets Manager
 
-** For your Redshift and RDS Instances the passwords are generated and stored in AWS Secrets Manager Service**
+**For your Redshift and RDS Instances the passwords are generated and stored in AWS Secrets Manager Service**
 
 Please go into AWS Console and find **AWS Secrets Manager**
-
 
 ![ ](/static/qlik-images/image83.png)
 
@@ -208,12 +205,12 @@ Please go into AWS Console and find **AWS Secrets Manager**
 
 ## Prerequisites for Starting Tutorials
 
-First of all, open QCDI on a web browser and
+First of all, open Qlik Cloud Data Integration on a web browser and
 login.
 
-> URL:**https://YOUR_SERVER_IP_ADDRESS:3552/attunityreplicate/**
+> URL:**https://YOUR_SERVER_IP_ADDRESS:3552/attunityqlik cloud data integration/**
 >
-> 1.Open Replicate in a new tab in your browser.
+> 1.Open Qlik Cloud Data Integration in a new tab in your browser.
 >
 > 2.For URL, username and password please refer to
 > [here](#getting-access-to-your-lab-environment)
@@ -221,7 +218,7 @@ login.
 > ***Please note that you may need to press accept security and
 > proceed.***
 
-Once you are logged in you will see the main screen for QCDI.
+Once you are logged in you will see the main screen for Qlik Cloud Data Integration.
 
 ![ ](/static/qlik-images/image11.png)
 
@@ -353,7 +350,7 @@ Click "Close" to close the window.
 
 Next, we need to configure our Kafka target endpoint. The process is much the same as you saw with the endpoints, and once again you will note that the configuration process is context sensitive as we move along.
 
-As before, the first step in the configuration process is to tell Replicate that we want to create a new endpoint. If you are back on the main window, you will need to click on "Manage Endpoint Connections" button.
+As before, the first step in the configuration process is to tell Qlik Cloud Data Integration that we want to create a new endpoint. If you are back on the main window, you will need to click on "Manage Endpoint Connections" button.
 
 ![ ](/static/qlik-images/image12.png)
 
@@ -410,7 +407,7 @@ Assuming so, click Save and the configuration of your Kafka target endpoint is
 
 ### Step 3 - Configure Your Task
 
-Now that we have configured our SAP source and Kafka target endpoints, we need to tie them together in what we call a Replicate **task**. In
+Now that we have configured our SAP source and Kafka target endpoints, we need to tie them together in what we call a Qlik Cloud Data Integration **task**. In
 short, a task defines the following:
 
 - A source endpoint
@@ -448,13 +445,13 @@ When you have everything set, press "OK" to create the task. Once you have comp
 
 ![ ](/static/qlik-images/image29.png)
 
-QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure your task, we need to select a source endpoint (SAP Application) and a target endpoint (Kafka). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says Drop source endpoint here, or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
+Qlik Cloud Data Integration is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure your task, we need to select a source endpoint (SAP Application) and a target endpoint (Kafka). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says Drop source endpoint here, or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
 ![ ](/static/qlik-images/image30.png)
 Repeat the same process for the Kafka Target endpoint. Your screen should now look like this:
 
 ![ ](/static/qlik-images/image31.png)
-Our next step is to select the tables we want to replicate from SAPApplication into Kafka. Click on the "Table Selection\..." button in the
+Our next step is to select the tables we want to qlik cloud data integration from SAPApplication into Kafka. Click on the "Table Selection\..." button in the
 top center of your browser.
 
 ![ ](/static/qlik-images/image32.png)
@@ -493,14 +490,14 @@ it. Press "Save" at the top left of the window and then press "Run".
 
 ### Step 4 - Run Your Task
 
-When you press "Run" Replicate will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring view.
+When you press "Run" Qlik Cloud Data Integration will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring view.
 
 ![ ](/static/qlik-images/image38.png)
 
 While in monitoring login to Kafdrop and look and the Kafka Topics via. **URL: YOUR_SERVER_IP_ADDRESS:9000**
 
 Initially you will not see your Kafka Topics configured for each table but after a few second you see it populate from SAP Application via Qlik
-Replicate.
+Qlik Cloud Data Integration.
 
 Pre-Load:
 
@@ -508,7 +505,7 @@ Pre-Load:
 
 After Initial Load:![A screenshot of a computer Description automatically generated](/static/qlik-images/image39.png)
 
-Now switch back to QCDI Task manager. After **Full Load** is complete, click on the "Completed" bar to display the tables. If there
+Now switch back to Qlik Cloud Data Integration Task manager. After **Full Load** is complete, click on the "Completed" bar to display the tables. If there
 is DML activity running in the background. Click on the "Change Processing" tab to see it in action.
 
 ![ ](/static/qlik-images/image40.png)
@@ -521,7 +518,7 @@ If you would like to see some of the messages we are delivering to Kafka, log on
 
 When you have seen enough, you can declare Victory for this part of the Lab!
 
-Press "Stop" in the top left corner of the **Replicate** console to
+Press "Stop" in the top left corner of the **Qlik Cloud Data Integration** console to
 end the task. Click "Yes" in the confirmation dialog and close the **SAP to Kafka** tab or click on the "TASKS" tab to return to
 the main window.
 
@@ -558,7 +555,7 @@ Following concepts were covered in the lab:
 Next, we need to configure our Amazon Aurora PostgreSQL target endpoint. The process is much the same as you saw with the SAP source, and once
 again you will note that the configuration process is context sensitive as we move along.
 
-During the initial setup of the lab Amazon Aurora Database has been created for your need. As before, the first step in the configuration process is to tell Replicate that we want to create a new endpoint. If you are back on the main window, you will need to click on "Manage Endpoint Connections" button.
+During the initial setup of the lab Amazon Aurora Database has been created for your need. As before, the first step in the configuration process is to tell Qlik Cloud Data Integration that we want to create a new endpoint. If you are back on the main window, you will need to click on "Manage Endpoint Connections" button.
 
 ![ ](/static/qlik-images/image12.png)
 
@@ -618,7 +615,7 @@ Assuming so, click "Save" and the configuration of your Postgres target endpoi
 ### Step 3 - Configure Your Task
 
 Now that we have configured our SAP source and Aurora Postgres target endpoints, we need to connect them together in what we call a
-Replicate **task**. In short, a task defines the following:
+Qlik Cloud Data Integration **task**. In short, a task defines the following:
 
 - A source endpoint
 
@@ -652,7 +649,7 @@ Once you have everything set, press "OK" to create the task. When you have com
 
 ![ ](/static/qlik-images/image49.png)
 
-QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select
+Qlik Cloud Data Integration is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select
 a source endpoint (SAP Application) and a target endpoint (Aurora). You can either drag the "SAP Application Source" endpoint from the box on
 the left of the screen and drop it into the circle that says "Drop source endpoint here" or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
@@ -662,7 +659,7 @@ Repeat the same process for the Aurora Postgres Target endpoint. Your screen sho
 
 ![ ](/static/qlik-images/image51.png)
 
-Our next step is to select the tables we want to replicate from SAP Application into Aurora Postgres. Click on the "Table Selection\..." button in the top center of your browser.
+Our next step is to select the tables we want to qlik cloud data integration from SAP Application into Aurora Postgres. Click on the "Table Selection\..." button in the top center of your browser.
 
 ![ ](/static/qlik-images/image32.png)
 
@@ -681,7 +678,7 @@ press "Run".
 
 ### Step 4 - Run Your Task
 
-After you press "Run", Replicate will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring change data capture as well.
+After you press "Run", Qlik Cloud Data Integration will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring change data capture as well.
 
 ![ ](/static/qlik-images/image52.png)
 
@@ -703,7 +700,7 @@ with:
 
 From there, click on drop down bar in the navigation pane. **For SAP LAB Please follow directions from Instructor**
 
-When you have seen enough, you can declare Victory! for this part of the Lab. Press "Stop" in the top left corner of the **Replicate** console to
+When you have seen enough, you can declare Victory! for this part of the Lab. Press "Stop" in the top left corner of the **Qlik Cloud Data Integration** console to
 end the task. After pressing "Stop" and clicking "Yes" in the confirmation dialog, click on the "TASKS" tab at the top of the screen. This will return you to the main window.
 
 ![ ](/static/qlik-images/image54.png)
@@ -741,7 +738,7 @@ Following concepts were covered in the lab:
 Next, we need to configure our Redshift target endpoint. The process is much the same as you saw with the SAP source but for Redshift, we need
 to have S3 Bucket, and once again you will note that the configuration process is context sensitive as we move along.
 
-As before, the first step in the configuration process is to tell Replicate that we want to create a new endpoint. If you are back on the
+As before, the first step in the configuration process is to tell Qlik Cloud Data Integration that we want to create a new endpoint. If you are back on the
 main window, you will need to click on "Manage Endpoint Connections" button.
 
 ![ ](/static/qlik-images/image12.png)
@@ -802,7 +799,7 @@ Due to Design of Redshift Cluster you need to use S3 as intermediate staging are
 
 ### Step 2.1 Amazon S3 and IAM Configuration
 
-Next, we need to configure our IAM Policy and Download Access and Secret Keys for QCDI to stage the data to Amazon S3 prior to writing it Redshift.
+Next, we need to configure our IAM Policy and Download Access and Secret Keys for Qlik Cloud Data Integration to stage the data to Amazon S3 prior to writing it Redshift.
 
 AWS IAM Policies, Users, and Roles are way AWS Secures resources and gives the right amount of access.
 
@@ -812,7 +809,7 @@ First grab the bucket name
 
 ![ ](/static/qlik-images/image60.png)
 
-Go to AWS S3 and you should see a bucket name that and in "-qlikreplicate"
+Go to AWS S3 and you should see a bucket name that and in "-qlikqlik cloud data integration"
 
 ![ ](/static/qlik-images/image61.png)
 Click on the bucket and "Properties."
@@ -825,7 +822,7 @@ Please get the name of the bucket and what AWS Region the bucket belongs in
 
 - This will help during S3 setup.
 
-Go back to QCDI and Fill in following from End Point Configurations
+Go back to Qlik Cloud Data Integration and Fill in following from End Point Configurations
 
 - Bucket Name: " YOURBUCKETNAME"
 
@@ -850,7 +847,7 @@ Click on and press "Add User"
 
 Input your Amazon S3 Username:
 
-- **Username: "qlik-replicate"**
+- **Username: "qlik-qlik cloud data integration"**
 
 - **Select Programmatic access only.**
 
@@ -874,13 +871,13 @@ Review you Username and Press Button "Create User"
 **At this point your new user with Full Amazon S3 privileges are
 created**
 
-Copy Access Key and Secret Key to QCDI Connection window (Click on Show on access key to view the key)
+Copy Access Key and Secret Key to Qlik Cloud Data Integration Connection window (Click on Show on access key to view the key)
 
 ![ ](/static/qlik-images/image71.png)
 
-Download your keys or copy the keys into QCDI Connection Window.(Please Click on Show to see your secret key)
+Download your keys or copy the keys into Qlik Cloud Data Integration Connection Window.(Please Click on Show to see your secret key)
 
-Please copy the keys to your QCDI Connection Window
+Please copy the keys to your Qlik Cloud Data Integration Connection Window
 
 - Access Key: "YOUR ACCESS KEY"
 
@@ -895,17 +892,17 @@ Press "Test" to test connection
 
 ![ ](/static/qlik-images/image73.png)
 
-*Note if you run into issues with QCDI complaining about S3 access please verify the qlik-replicate user has access to S3 buckets.*
+*Note if you run into issues with Qlik Cloud Data Integration complaining about S3 access please verify the qlik-qlik cloud data integration user has access to S3 buckets.*
 
 ![ ](/static/qlik-images/image74.png)
 
-*QCDI can write directly to S3 For more details about using Amazon S3 as a target, please review the section "Using a Amazon S3 as a Target" in Chapter 9 "Adding and Managing Target Endpoints" of the [QCDI User Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf)*
+*Qlik Cloud Data Integration can write directly to S3 For more details about using Amazon S3 as a target, please review the section "Using a Amazon S3 as a Target" in Chapter 9 "Adding and Managing Target Endpoints" of the [Qlik Cloud Data Integration User Guide](<https://qlik-aws-sap.netlify.app/files/Qlik_Qlik> Cloud Data Integration_User_Guide.pdf)*
 
 ###
 
 ### Step 3 - Configure Your Task
 
-Now that we have configured our SAP source and Redshift target endpoints, we need to tie them together in what we call a Replicate **task**. In short, a task defines the following:
+Now that we have configured our SAP source and Redshift target endpoints, we need to tie them together in what we call a Qlik Cloud Data Integration **task**. In short, a task defines the following:
 
 - A source endpoint
 
@@ -941,7 +938,7 @@ Give this task a meaningful name like SAP Application to Redshift. For this tas
 Once you have everything set, press "OK" to create the task. When you have completed this step, you will see a window that looks like this:
 
 ![ ](/static/qlik-images/image75.png)
-QCDI is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select a source endpoint (SAP) and a target endpoint (Redshift). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says "Drop source endpoint here", or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
+Qlik Cloud Data Integration is all about **ease of use**. The interface is point-and-click, drag-and-drop. To configure our task, we need to select a source endpoint (SAP) and a target endpoint (Redshift). You can either drag the "SAP Application Source" endpoint from the box on the left of the screen and drop it into the circle that says "Drop source endpoint here", or you can click on the arrow that appears just to the right of the endpoint when you highlight it.
 
 ![ ](/static/qlik-images/image50.png)
 
@@ -952,7 +949,7 @@ should now look like this:
 
 ![ ](/static/qlik-images/image77.png)
 
-Our next step is to select the tables we want to replicate from SAP Application into Aurora Postgres. Click on the "Table Selection" button in the top center of your browser.
+Our next step is to select the tables we want to qlik cloud data integration from SAP Application into Aurora Postgres. Click on the "Table Selection" button in the top center of your browser.
 
 ![ ](/static/qlik-images/image32.png)
 and from there select the "ADEMO" Business Groups.
@@ -970,7 +967,7 @@ That completes configuration of the task. We are now ready to save our task and 
 
 ### Step 4 - Run Your Task
 
-After you press "Run", Replicate will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring change data capture as well.
+After you press "Run", Qlik Cloud Data Integration will automatically switch from **Designer** mode to **Monitor** mode. You will be able to watch the status of the full load as it occurs, and then switch to monitoring change data capture as well.
 
 ![ ](/static/qlik-images/image78.png)
 
@@ -1007,7 +1004,7 @@ Press the Edit on Top Connections
 
 - Database Password: *please access you
 
-When you have seen enough, you can declare Victory! for this part of the Lab. Press "Stop" in the top left corner of the **Replicate** console to end the task. After pressing "Stop" and clicking "Yes" in the confirmation dialog, click on the "TASKS" tab at the top of the screen.This will return you to the main window.
+When you have seen enough, you can declare Victory! for this part of the Lab. Press "Stop" in the top left corner of the **Qlik Cloud Data Integration** console to end the task. After pressing "Stop" and clicking "Yes" in the confirmation dialog, click on the "TASKS" tab at the top of the screen.This will return you to the main window.
 
 ### Summary
 
@@ -1025,17 +1022,17 @@ Following concepts were covered in the lab:
 
 # Resources
 
-### Thanks for taking the QCDI Lab for a spin. Assuming you followed all the steps and completed the exercises, we are confident that you will have found the experience to be a good one and that our focus on ease of use was evident
+### Thanks for taking the Qlik Cloud Data Integration Lab for a spin. Assuming you followed all the steps and completed the exercises, we are confident that you will have found the experience to be a good one and that our focus on ease of use was evident
 
 ### The product documentation and help can be found at
 
-[QCDI Online
-Guide](https://help.qlik.com/en-US/replicate/November2020-SR1/Content/Replicate/Main/Introduction/Home.htm) - Online Help Guide for QCDI
+[Qlik Cloud Data Integration Online
+Guide](<https://help.qlik.com/en-US/qlik> cloud data integration/November2020-SR1/Content/Qlik Cloud Data Integration/Main/Introduction/Home.htm) - Online Help Guide for Qlik Cloud Data Integration
 
-[QCDI Offline User
-Guide](https://qlik-aws-sap.netlify.app/files/Qlik_Replicate_User_Guide.pdf) -PDF Help Guide for QCDI
+[Qlik Cloud Data Integration Offline User
+Guide](<https://qlik-aws-sap.netlify.app/files/Qlik_Qlik> Cloud Data Integration_User_Guide.pdf) -PDF Help Guide for Qlik Cloud Data Integration
 
-[Qlik Community](https://community.qlik.com/) - Community page for QCDI
+[Qlik Community](https://community.qlik.com/) - Community page for Qlik Cloud Data Integration
 
 ### About the Sample Data
 
@@ -1045,17 +1042,17 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 
 # Videos
 
-### Thanks for taking the QCDI Lab for a spin. Here are some Video resource for the Labs as well other Video Assets produced by the Qlik Team
+### Thanks for taking the Qlik Cloud Data Integration Lab for a spin. Here are some Video resource for the Labs as well other Video Assets produced by the Qlik Team
 
 ### The product documentation and help can be found at
 
-- [QCDI Explainer and Demo Video](https://youtu.be/3UBa5WgOfio)
+- [Qlik Cloud Data Integration Explainer and Demo Video](https://youtu.be/3UBa5WgOfio)
 
-- [QCDI Real Time Data Ingestion](https://youtu.be/qU7tF7npJt0)
+- [Qlik Cloud Data Integration Real Time Data Ingestion](https://youtu.be/qU7tF7npJt0)
 
-- [QCDI Many to One](https://youtu.be/0mka2LNf7Sg)
+- [Qlik Cloud Data Integration Many to One](https://youtu.be/0mka2LNf7Sg)
 
-- [QCDI Installation on Linux](https://youtu.be/tMJhi2U2JLw)
+- [Qlik Cloud Data Integration Installation on Linux](https://youtu.be/tMJhi2U2JLw)
 
 # Contacts
 
@@ -1073,12 +1070,11 @@ Copyright 1996-2018 by Sean Lahman. It is licensed for use under a [Creative Co
 - *Matt Hayes, VP SAP Business - <matt.hayes@qlik.com>*
 - *Tom Olivero, Senior Manager, SAP Data Architects - <tom.olivero@qlik.com>*
 - *David Frerik, Evangelist and Technology Partnership - <david.frerik@qlik.com>*
+- *Brad Songer, Regional Alliance Manager -<brad.songer@qlik.com>*
 
-
-# Register for a free QCDI POC
+# Register for a free Qlik Cloud Data Integration POC
 
 - For customers and prospect of AWS who are looking to do a POC Please register via this [link](https://www.qlik.com/us/try-or-buy/buy-now?campaignid=7013z000000j5hi)
 ![](/static/qlik-images/image82.png)
-
 
 After you completed all the steps in the Quickstart, please return back to this workshop window.
